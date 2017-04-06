@@ -2,10 +2,14 @@ package com.example.android.newsfeed;
 
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.widget.TextView;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +39,16 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
 
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
 
-        .build();
-        ImageLoader.getInstance().init(config);
+
+        if(ImageLoader.getInstance()!=null) {
+            ImageLoader.getInstance().init(config);
+        }
+
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+
 
         TextView emptyView = (TextView)findViewById(R.id.empty_view);
 
@@ -48,6 +60,23 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<L
         mNewsAdapter = new NewsAdapter(this, 0,  new ArrayList<News>());
 
         newsList.setAdapter(mNewsAdapter);
+
+        newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //select clicked news
+
+
+                News currentNews = (News)adapterView.getItemAtPosition(i);
+                String url = currentNews.getUrl();
+
+
+                Intent webLoad = new Intent(NewsActivity.this, NewsBrowse.class );
+                webLoad.putExtra("url", url);
+                startActivity(webLoad);
+
+            }
+        });
     }
 
 

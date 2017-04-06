@@ -157,7 +157,8 @@ public final class QueryUtils {
                     publishDate = article.getString("publishedAt");
 
 
-                    news.add(new News(title, description, articleImage, publishDate ));
+
+                    news.add(new News(title, description, articleImage, publishDate, articleUrl ));
 
 
                 }

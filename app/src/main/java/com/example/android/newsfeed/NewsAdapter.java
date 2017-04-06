@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.ArrayList;
@@ -52,12 +54,10 @@ public class NewsAdapter extends ArrayAdapter<News>{
         TextView titleView = (TextView)listItemView.findViewById(R.id.title_view);
 
         titleView.setText(title);
-  //      int linesLeft = 4 - titleView.getLineHeight();
-        Log.e("Adapter", "lines left " + titleView.getLineHeight());
+
         //Exctracts title from News object and set it to news_item.xml correct view
         String subTitle = currentNews.getSubTitle();
         TextView subTitleView = (TextView)listItemView.findViewById(R.id.sub_title_view);
-//        subTitleView.setMaxLines(linesLeft);
         subTitleView.setText(subTitle);
 
 
@@ -71,12 +71,17 @@ public class NewsAdapter extends ArrayAdapter<News>{
         ImageView imageView = (ImageView)listItemView.findViewById(R.id.image_view);
         //imageView.setImageBitmap(newsImage);
 
-        imageLoader.clearMemoryCache();
+
+
         DisplayImageOptions options = new DisplayImageOptions.Builder()
+
 
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new RoundedBitmapDisplayer(15))
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .resetViewBeforeLoading(true)
                 .build();
 
         imageLoader.getInstance().displayImage(newsImage, imageView, options);
